@@ -18,15 +18,13 @@
 
 package cc.woverflow.hytils.util.locraw;
 
-import cc.woverflow.hytils.HytilsReborn;
-import cc.woverflow.hytils.events.LocrawEvent;
 import cc.woverflow.hytils.handlers.chat.ChatReceiveModule;
 import cc.woverflow.hytils.handlers.game.GameType;
 import com.google.gson.Gson;
 import gg.essential.api.EssentialAPI;
+import gg.essential.universal.UChat;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
@@ -36,7 +34,6 @@ public class LocrawUtil implements ChatReceiveModule {
     private final Gson gson = new Gson();
     private LocrawInformation locrawInformation;
     private boolean listening;
-    private boolean isResending = false;
     private int tick;
     private boolean playerSentCommand = false;
 
@@ -47,9 +44,9 @@ public class LocrawUtil implements ChatReceiveModule {
         }
 
         this.tick++;
-        if (this.tick == 20 || this.tick % 500 == 0) {
+        if (this.tick == 40 || this.tick % 520 == 0) {
             this.listening = true;
-            HytilsReborn.INSTANCE.getCommandQueue().queue("/locraw");
+            UChat.say("/locraw");
         }
     }
 
@@ -57,15 +54,12 @@ public class LocrawUtil implements ChatReceiveModule {
     public void onWorldLoad(WorldEvent.Load event) {
         locrawInformation = null;
         tick = 0;
-        isResending = false;
     }
 
     @SuppressWarnings("UnusedReturnValue")
     public String onMessageSend(@NotNull String message) {
         if (message.startsWith("/locraw") && !this.listening) {
-            if (this.tick == 22 || this.tick % 500 != 0) {
-                this.playerSentCommand = true;
-            }
+            this.playerSentCommand = true;
 
         }
         return message;
@@ -87,10 +81,6 @@ public class LocrawUtil implements ChatReceiveModule {
                     // Stop listening for locraw and cancel the message.
                     if (!this.playerSentCommand) {
                         event.setCanceled(true);
-                    }
-                    if (!isResending) {
-                        MinecraftForge.EVENT_BUS.post(new LocrawEvent(locrawInformation));
-                        isResending = true;
                     }
 
                     this.playerSentCommand = false;

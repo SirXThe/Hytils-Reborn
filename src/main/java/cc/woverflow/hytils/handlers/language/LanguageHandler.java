@@ -23,10 +23,6 @@ import com.google.gson.GsonBuilder;
 import gg.essential.api.utils.JsonHolder;
 import gg.essential.api.utils.Multithreading;
 import gg.essential.api.utils.WebUtil;
-import net.minecraft.client.Minecraft;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Automatically switches the player's language based on their current
@@ -39,10 +35,6 @@ public class LanguageHandler {
 
     private final Gson gson = new GsonBuilder().create();
     private final LanguageData fallback = new LanguageData();
-    private final Map<String, String> languageMappings = new HashMap<String, String>() {{
-        put("ENGLISH", "en");
-        put("FRENCH", "fr");
-    }};
 
     private LanguageData current = fallback;
 
@@ -51,12 +43,10 @@ public class LanguageHandler {
     }
 
     private void initialize() {
-        final String username = Minecraft.getMinecraft().getSession().getUsername();
-        final JsonHolder json = WebUtil.fetchJSON("https://api.sk1er.club/player/" + username);
-        final String language = languageMappings.getOrDefault(json.optJSONObject("player").defaultOptString("userLanguage", "ENGLISH"), "en");
+        fallback.initialize();
         JsonHolder jsonHolder = WebUtil.fetchJSON("https://data.woverflow.cc/regex.json");
         if (!jsonHolder.getKeys().isEmpty()) {
-            current = gson.fromJson(jsonHolder.has(language) ? jsonHolder.optActualJSONObject(language).toString() : jsonHolder.optActualJSONObject("en").toString(), LanguageData.class);
+            current = gson.fromJson(jsonHolder.optActualJSONObject("en").toString(), LanguageData.class);
         }
         current.initialize();
     }

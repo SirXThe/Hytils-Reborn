@@ -55,7 +55,6 @@ import cc.woverflow.hytils.util.HypixelAPIUtils;
 import cc.woverflow.hytils.util.friends.FriendCache;
 import cc.woverflow.hytils.util.locraw.LocrawUtil;
 import cc.woverflow.hytils.util.skyblock.SkyblockChecker;
-import cc.woverflow.onecore.utils.Updater;
 import gg.essential.api.EssentialAPI;
 import gg.essential.universal.ChatColor;
 import net.minecraft.client.Minecraft;
@@ -112,7 +111,6 @@ public class HytilsReborn {
     @Mod.EventHandler
     public void onFMLPreInitialization(FMLPreInitializationEvent event) {
         if (!modDir.exists()) modDir.mkdirs();
-        Updater.INSTANCE.addToUpdater(event.getSourceFile(), MOD_NAME, MOD_ID, VERSION, "W-OVERFLOW/Hytils-Reborn");
     }
 
     @Mod.EventHandler
