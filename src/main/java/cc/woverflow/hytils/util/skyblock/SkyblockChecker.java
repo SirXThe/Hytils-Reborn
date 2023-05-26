@@ -36,7 +36,7 @@ public class SkyblockChecker {
         final EntityPlayerSP player = mc.thePlayer;
         if (mc.theWorld != null && player != null) {
             if (!mc.isSingleplayer() && player.getClientBrand() != null) {
-                if (!player.getClientBrand().contains("Hypixel")) {
+                if (!player.getClientBrand().contains("hypixel")) {
                     return false;
                 }
             } else {

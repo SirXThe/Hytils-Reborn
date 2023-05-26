@@ -18,6 +18,7 @@
 
 package cc.woverflow.hytils.util.locraw;
 
+import cc.woverflow.hytils.events.LocrawEvent;
 import cc.woverflow.hytils.handlers.chat.ChatReceiveModule;
 import cc.woverflow.hytils.handlers.game.GameType;
 import com.google.gson.Gson;
@@ -25,6 +26,7 @@ import gg.essential.api.EssentialAPI;
 import gg.essential.universal.UChat;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
@@ -82,6 +84,8 @@ public class LocrawUtil implements ChatReceiveModule {
                     if (!this.playerSentCommand) {
                         event.setCanceled(true);
                     }
+
+                    MinecraftForge.EVENT_BUS.post(new LocrawEvent(locrawInformation));
 
                     this.playerSentCommand = false;
                     this.listening = false;
